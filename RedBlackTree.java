@@ -433,10 +433,10 @@ public class RedBlackTree{
   
   
   //---- Your part:
-  // This should check for the four rules that ensure the tree is a Red Black Tree.
-  // 1 Every node is either red or black.
-  // 2 The root is black.
-  // 3 Every leaf (nil) is black.
+  // This should check for the rules that ensure the tree is a Red Black Tree.
+  // 1 Every node is either red or black. (This is a given since Nodes have a red/black property)
+  // 2 The root is black. 
+  // 3 Every leaf (nil) is black. (This is a definition so there's nothing to check)
   // 4 If a node is red, then both its children are black.
   // 5 For each node, all paths from the node to descendant leaves contain the same number of black nodes.
   // To receive full credit you must explicitly check for each property! You may not assume anything based on the above implementation (which does ensure all these rules are followed)
@@ -457,4 +457,5 @@ public class RedBlackTree{
 	  return 0;
   }
 }
+
 
