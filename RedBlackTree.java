@@ -1,6 +1,6 @@
 //The following is one possible RedBlackTree implementation.
 //Much of this code is from Sven Woltmann's public GitHub repository. Thank you Mr. Woltmann for making your code available for educational purposes.
-
+import java.util.ArrayList;
 public class RedBlackTree{
 
   static final boolean RED = false;
@@ -441,20 +441,98 @@ public class RedBlackTree{
   // 5 For each node, all paths from the node to descendant leaves contain the same number of black nodes.
   // To receive full credit you must explicitly check for each property! You may not assume anything based on the above implementation (which does ensure all these rules are followed)
   // you may wish to add some helper functions here.
+
+
+  //pre condition: RBT is initialized
+  //post condition: returns true if the RBT is a red black tree, following the rules for an RBT, and false if it does not.
   public boolean isRedBlack() {
+    if (!isBlack(root))
 	  return false;
+    return isRedBlack(root);
   }
   
+  //pre condition: RBT is initialized
+  //post condition: returns true if the RBT is a red black tree, following the rules for an RBT, and false if it does not.
+  private boolean isRedBlack(Node n){
+    if(!isBlack(root)){
+      return false;
+    }
+    if(n==null){
+      return true;
+    }
+    //checks if the node is red and a child is red
+    if (!isBlack(n)&&(!isBlack(n.left)||!isBlack(n.right))){
+      return false;
+    }
+    //if the black height of either child is unequal, return false
+    if (!(blackHeight(n.left)==blackHeight(n.right))){
+      return false;
+    }
+    //check all nodes starting from root
+    if(isRedBlack(n.left)&&isRedBlack(n.right)){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
   
+
+  //pre condition: RBT is initialized
+  //post condition: returns the height of the tree, only considering black nodes for the height
+  private int blackHeight(Node n){
+    if (n==null){
+      return 0;
+    }
+    int i=0;
+    if (isBlack(n)) i=1;
+    return i+blackHeight(n.right);
+  }
+
+  //pre condition: RBT is initialized
+  //post condition: returns the height of the tree (the highest number of nodes to a leaf)
+  private int realHeight(Node n){
+    if(n==null) return 0;
+    return 1+Math.max(realHeight(n.left),realHeight(n.right));
+  }
+  
+  //pre condition: RBT is initialized
+  //post condition: returns a arraylist of integers of the keys of the nodes of the shortest path to a leaf
+  private ArrayList<Integer> shortHeight(Node n, ArrayList<Integer> nums){
+    if (n==null) return nums;
+    nums.add(n.key);
+    if(n.left==null||n.right==null) {
+      return nums;
+    }
+    if (Math.min(realHeight(n.left),realHeight(n.right))==n.left.key){
+      return shortHeight(n.left,nums);
+    }
+    else{
+      return shortHeight(n.right,nums);
+    }
+  }
+
+
   //This should return a string of comma separated keys that represents the shortest height path through the tree.
   //Perhaps this would be easier to do with some helper functions?
+  //pre condition: RBT is initialized
+  //post condition: returns a string of numbers separated by commas of the keys of the shortest path to a leaf
   public String shortestTruePath() {
-	  return "";
+    String path="";
+    ArrayList<Integer> list=new ArrayList<>();
+    list=shortHeight(root, list);
+	  for(int i=0;i<list.size();i++){
+      path=path+(list.get(i)+", ");
+    }
+
+    return path;
   }
-  
+
   //This returns the absolute value of the difference between the real height of the tree and its black height. 
+  //pre condition: RBT is initialized
+  //post condition: returns the difference between the real height and the black height.
   public int trueHeightDiff(){
-	  return 0;
+	  return realHeight(root)-blackHeight(root);
   }
 }
 
